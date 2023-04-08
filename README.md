@@ -10,6 +10,7 @@ sudo apt install -y \
     apt-transport-https \
     ca-certificates \
     curl \
+    exa \
     fzf \
     git \
     gnupg-agent \
