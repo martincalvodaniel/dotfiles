@@ -1,0 +1,10 @@
+[user]
+        email = martincalvodaniel@gmail.com
+        name = dmartinc
+[core]
+        excludesfile = /home/dmartinc/.gitignore
+[alias]
+        s = status -s
+        lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+        mergec = merge --no-ff --no-commit
+        gclean = clean -d -f -f
