@@ -29,13 +29,13 @@ sudo apt install -y \
   <summary>Git config</summary>
 
 ```shell
-ln -s .dotfiles/shell/bash/.bash_aliases .bash_aliases
+ln -s .dotfiles/git/.gitignore_global .gitignore_global
+ln -s .dotfiles/git/.gitconfig .gitconfig
 ln -s .dotfiles/shell/bash/.bash_profile .bash_profile
+ln -s .dotfiles/shell/bash/.bash_aliases .bash_aliases
 ln -s .dotfiles/shell/bash/.bashrc .bashrc
 ln -s .dotfiles/shell/bash/.profile .profile
-ln -s .dotfiles/git/.gitconfig .gitconfig
-ln -s .dotfiles/git/.gitignore_global .gitignore_global
-
-source ~/.bashrc
+ln -s .dotfiles/shell/zsh/.zimrc .zimrc
+ln -s .dotfiles/shell/zsh/.zshrc
 ```
 </details>
