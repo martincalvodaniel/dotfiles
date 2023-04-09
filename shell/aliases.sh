@@ -12,7 +12,8 @@ alias ...="cd ../.."
 alias ....="cd ../../.."
 alias .....="cd ../../../.."
 
-alias ll="exa -l --icons"
+alias ll="ls -alsh"
+#alias ll="exa -l --icons"
 alias la="exa -la --icons"
 
 alias d2u='dos2unix'

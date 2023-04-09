@@ -29,25 +29,12 @@ sudo apt install -y \
   <summary>Git config</summary>
 
 ```shell
-# Set username and email for next commands
-email="martincalvodaniel@gmail.com"
-username="dmartinc"
+ln -s .dotfiles/shell/bash/.bash_profile .bash_profile
+ln -s .dotfiles/shell/bash/.bashrc .bashrc
+ln -s .dotfiles/shell/bash/.profile .profile
+ln -s .dotfiles/git/.gitconfig .gitconfig
+ln -s .dotfiles/git/.gitignore_global .gitignore_global
 
-# Configure Git
-echo "[GIT] Setting git config paramaters"
-git config --global user.email "${email}"
-git config --global user.name "${username}"
-git config --global core.excludesfile ~/.gitignore
-
-# Configure git alias
-echo "[GIT] Alias setup"
-git config --global alias.s "status -s"
-git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
-git config --global alias.mergec "merge --no-ff --no-commit"
-git config --global alias.gclean "clean -d -f -f"
-
-# Generate and show a new SSH key
-ssh-keygen -t rsa -b 4096 -C "${email}"
-cat ~/.ssh/id_rsa.pub
+source ~/.bashrc
 ```
 </details>
