@@ -12,9 +12,7 @@ alias ...="cd ../.."
 alias ....="cd ../../.."
 alias .....="cd ../../../.."
 
-alias ll="ls -alsh"
-#alias ll="exa -l --icons"
-alias la="exa -la --icons"
+alias ll="exa -la --icons"
 
 alias d2u='dos2unix'
 
@@ -33,6 +31,9 @@ alias gs="git status -sb"
 # IDEA
 alias ij='sh /opt/idea/bin/idea.sh > /opt/idea/log/ij.log 2>&1 &'
 alias ijp='sh /opt/idea/bin/idea.sh . > /opt/idea/log/ijp.log 2>&1 &'
+alias i.='ijp'
+alias c.='code .'
+alias o.='open .'
 
 # DOCKER
 alias drm='_docker_remove'
