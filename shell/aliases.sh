@@ -77,9 +77,6 @@ alias j8="sdk use java 8.0.362-tem"
 alias j11="sdk use java 11.0.18-tem"
 alias j17="sdk use java 17.0.6-tem"
 
-alias hi="echo 'Hello there!'"
-alias reload="source ~/.zshrc"
-
 # WSL specific things
 if grep --quiet microsoft /proc/version 2>/dev/null; then
   alias idea="(pkill -f 'java.*idea' || true) && screen -d -m /opt/idea/bin/idea.sh"
