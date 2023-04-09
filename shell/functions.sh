@@ -1,5 +1,5 @@
 function cdd() {
-  cd "$(ls -d -- */ | fzf)" || echo "Invalid directory"
+  cd "$(find . -maxdepth 1 -type d | fzf)" || echo "Invalid directory"
 }
 
 function j() {
