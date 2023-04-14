@@ -1,42 +1,43 @@
 [user]
-        name = dmartinc
-	email = martincalvodaniel@gmail.com
+    email = martincalvodaniel@gmail.com
+    name = dmartinc
 [color]
-	diff = auto
-	status = auto
-	branch = auto
-	ui = true
+    branch = auto
+    diff = auto
+    status = auto
+    ui = true
 [core]
-	excludesfile = ~/.gitignore_global
-	editor=vim
+    editor=vim
+    excludesfile = ~/.gitignore_global
 [diff]
-	tool = vimdiff
-	compactionHeuristic = true
-	indentHeuristic = true
+    tool = vimdiff
+    compactionHeuristic = true
+    indentHeuristic = true
 [difftool]
-	prompt = false
+    prompt = false
 [color "diff"]
-	meta = yellow bold
-	commit = green bold
-	frag = magenta bold
-	old = red bold
-	new = green bold
-	whitespace = red reverse
+    meta = yellow bold
+    commit = green bold
+    frag = magenta bold
+    old = red bold
+    new = green bold
+    whitespace = red reverse
 [color "diff-highlight"]
-	oldNormal = red bold
-	oldHighlight = "red bold 52"
-	newNormal = "green bold"
-	newHighlight = "green bold 22"
+    oldNormal = red bold
+    oldHighlight = "red bold 52"
+    newNormal = "green bold"
+    newHighlight = "green bold 22"
 [color "branch"]
-	current = yellow reverse
-	local = yellow
-	remote = green
+    current = yellow reverse
+    local = yellow
+    remote = green
 [color "status"]
-	added = yellow
-	changed = green
-	untracked = cyan	
+    added = yellow
+    changed = green
+    untracked = cyan
 [alias]
-        s = status -s
-        lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
-        mergec = merge --no-ff --no-commit
-        gclean = clean -d -f -f
+    s = status -s
+    lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    mergec = merge --no-ff --no-commit
+    gclean = clean -d -f -f
+

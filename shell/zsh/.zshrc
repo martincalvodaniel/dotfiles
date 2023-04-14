@@ -49,7 +49,7 @@ source ${ZIM_HOME}/init.zsh
 ZSH_AUTOSUGGEST_USE_ASYNC=true
 ZSH_HIGHLIGHT_MAXLENGTH=300
 
-source "$DOTFILES_PATH/shell/init.sh"
+source ${DOTFILES_PATH}/shell/init.sh
 
 zmodload -F zsh/terminfo +p:terminfo
 # Bind ^[[A/^[[B manually so up/down works both before and after zle-line-init
@@ -60,4 +60,5 @@ for key ('j') bindkey -M vicmd ${key} history-substring-search-down
 unset key
 # }}} End configuration added by Zim install
 
+# Uncomment for debug with `zprof`
 # zprof
