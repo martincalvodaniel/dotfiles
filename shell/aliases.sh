@@ -56,17 +56,10 @@ alias kdcj="k describe cj"
 alias kds="k describe svc"
 alias kdi="k describe ingress"
 ## edit
-alias kep="k edit pod"
 alias ked="k edit deploy"
 alias kecj="k edit cj"
 alias kes="k edit svc"
 alias kei="k edit ingress"
-
-#AWS
-alias k8s-dev="aws eks update-kubeconfig --name dev"
-alias k8s-pre="aws eks update-kubeconfig --name pre"
-alias k8s-pro="aws eks update-kubeconfig --name pro"
-alias k8s-pro-k8s-tools="aws eks update-kubeconfig --name pro-k8s-tools"
 
 alias grep="grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}"
 

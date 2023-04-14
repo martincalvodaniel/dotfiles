@@ -46,7 +46,6 @@ ln -s .dotfiles/shell/zsh/.zimrc .zimrc
 ln -s .dotfiles/shell/zsh/.zshrc
 
 ## oh-my-zsh with antibody
-ln -s .dotfiles/shell/zsh/antibody/.aliases.zsh .aliases.zsh
 ln -s .dotfiles/shell/zsh/antibody/.zshenv .zshenv
 ln -s .dotfiles/shell/zsh/antibody/.zshrc .zshrc
 ln -s .dotfiles/shell/zsh/antibody/.p10k.zsh .p10k.zsh

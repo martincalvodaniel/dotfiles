@@ -1,4 +1,7 @@
-#!/bin/zsh
+# Uncomment for debug with `zprof`
+# zmodload zsh/zprof
+
+export DOTFILES_PATH="$HOME/.dotfiles"
 
 # Do not want background jobs to be at a lower priority
 unsetopt BG_NICE
@@ -10,8 +13,8 @@ if grep --quiet microsoft /proc/version 2>/dev/null; then
   export LIBGL_ALWAYS_INDIRECT=1
 fi
 
-# Custom aliases
-[ -f ~/.aliases.zsh ] && source ~/.aliases.zsh
+# Custom dotfiles load
+[ -f ${DOTFILES_PATH}/shell/init.sh ] && source ${DOTFILES_PATH}/shell/init.sh
 
 # All zsh plugins (Generated via Antibody)
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
@@ -96,7 +99,6 @@ bindkey "^[[1;5D" backward-word
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
-
 _control_h_binding() {
     directory_to_move=$(ll | fzf | awk '{print $10}')
     cd "$directory_to_move"
@@ -111,7 +113,7 @@ _reverse_search() {
   LBUFFER=$selected_command
 }
 zle -N _reverse_search
-bindkey '^r' _reverse_search
+# bindkey '^r' _reverse_search
 
 _kill_process() {
   pid=$(ps -aux | fzf | awk '{print $2}')
@@ -134,41 +136,5 @@ _select() {
     echo $selected
     BUFFER=$selected
 }
-
-kafka_connector_status() {
-    local env="${1:-dev}"
-    local connector_name=$(curl -s https://internal-product-lists-kafka-connect.$env.k8s.mango/connectors | jq -r '.[]' | fzf | awk '{print $1}')
-    curl -s https://internal-product-lists-kafka-connect.$env.k8s.mango/connectors/$connector_name/status | jq
-}
-kafka_connector_status2() {
-    local env="${1:-dev}"
-    local connector_names=$(curl -s https://internal-product-lists-kafka-connect.$env.k8s.mango/connectors | jq -r '.[]' | fzf -m)
-    #set -x
-    for connector_name in $connector_names
-    do
-      echo "Connector: $connector_name"
-      #local connector_name=${connector_name%$'\n'}   # Remove a trailing newline.
-      #curl -s https://internal-product-lists-kafka-connect.$env.k8s.mango/connectors/$connector_name/status | jq
-      #echo "Done: $connector_name"
-    done
-}
-kafka_connector_put() {
-    local env="${1:-dev}"
-    local command="${2:-resume}"
-    local connector_name=$(curl -s https://internal-product-lists-kafka-connect.$env.k8s.mango/connectors | jq -r '.[]' | fzf | awk '{print $1}')
-    echo "OLD STATUS"
-    curl -s https://internal-product-lists-kafka-connect.$env.k8s.mango/connectors/$connector_name/status | jq
-    curl -s -X PUT https://internal-product-lists-kafka-connect.$env.k8s.mango/connectors/$connector_name/$command | jq
-    echo "NEW STATUS"
-    curl -s https://internal-product-lists-kafka-connect.$env.k8s.mango/connectors/$connector_name/status | jq
-}
-kafka_connector_post() {
-    local env="${1:-dev}"
-    local command="${2:-restart}"
-    local connector_name=$(curl -s https://internal-product-lists-kafka-connect.$env.k8s.mango/connectors | jq -r '.[]' | fzf | awk '{print $1}')
-    echo "OLD STATUS"
-    curl -s https://internal-product-lists-kafka-connect.$env.k8s.mango/connectors/$connector_name/status | jq
-    curl -s -X POST https://internal-product-lists-kafka-connect.$env.k8s.mango/connectors/$connector_name/$command | jq
-    echo "NEW STATUS"
-    curl -s https://internal-product-lists-kafka-connect.$env.k8s.mango/connectors/$connector_name/status | jq
-}
+# Uncomment for debug with `zprof`
+# zprof
