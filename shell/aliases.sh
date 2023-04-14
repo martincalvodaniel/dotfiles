@@ -33,33 +33,34 @@ alias c.='code .'
 alias o.='open .'
 
 # DOCKER
-alias drm='_docker_remove'
-alias drmi='_docker_remove_image'
+alias drm='docker_remove'
+alias drmi='docker_remove_image'
 
 # K8S
 alias k="kubectl"
-alias kc='echo $KUBECONFIG'
-alias kd='k describe'
 ## logs
 alias kl="k logs"
-alias klf="k logs -f"
+alias klf="kl -f"
 ## get
-alias kgp="k get pod"
-alias kgd="k get deploy"
-alias kgcj="k get cj"
-alias kgs="k get svc"
-alias kgi="k get ingress"
+alias kg="k get"
+alias kgp="kg pod"
+alias kgd="kg deploy"
+alias kgcj="kg cj"
+alias kgs="kg svc"
+alias kgi="kg ingress"
 ## describe
-alias kdp="k describe pod"
-alias kdd="k describe deploy"
-alias kdcj="k describe cj"
-alias kds="k describe svc"
-alias kdi="k describe ingress"
+alias kdp="k describe"
+alias kdp="kd pod"
+alias kdd="kd deploy"
+alias kdcj="kd cj"
+alias kds="kd svc"
+alias kdi="kd ingress"
 ## edit
-alias ked="k edit deploy"
-alias kecj="k edit cj"
-alias kes="k edit svc"
-alias kei="k edit ingress"
+alias ke="k edit"
+alias ked="ke deploy"
+alias kecj="ke cj"
+alias kes="ke svc"
+alias kei="ke ingress"
 
 alias grep="grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}"
 

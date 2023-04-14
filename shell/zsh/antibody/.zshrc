@@ -123,13 +123,6 @@ _kill_process() {
 zle -N _kill_process
 bindkey "^k" _kill_process
 
-
-_docker_remove() {
-    docker ps -a | fzf | awk '{print $12}' | xargs docker rm -f | awk '{print "Removed container with name "$1}'
-}
-_docker_remove_image() {
-    docker images -a | fzf | awk '{print $1}' | xargs docker rmi
-}
 _select() {
     local command_output=$($@)
     local selected=$(echo $command_output | fzf --no-sort | awk '{print $1}')

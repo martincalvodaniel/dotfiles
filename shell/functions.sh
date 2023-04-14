@@ -9,3 +9,10 @@ function recent_dirs() {
 
   cd "$(echo "$selected" | sed "s/\~/$escaped_home/")" || echo "Invalid directory"
 }
+
+function docker_remove() {
+    docker ps -a | fzf | awk '{print $12}' | xargs docker rm -f | awk '{print "Removed container with name "$1}'
+}
+function docker_remove_image() {
+    docker images -a | fzf | awk '{print $1}' | xargs docker rmi
+}
