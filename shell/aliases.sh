@@ -49,7 +49,7 @@ alias kgcj="kg cj"
 alias kgs="kg svc"
 alias kgi="kg ingress"
 ## describe
-alias kdp="k describe"
+alias kd="k describe"
 alias kdp="kd pod"
 alias kdd="kd deploy"
 alias kdcj="kd cj"
