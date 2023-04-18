@@ -1,7 +1,7 @@
 # Uncomment for debug with `zprof`
 # zmodload zsh/zprof
 
-export DOTFILES_PATH={$HOME}/.dotfiles
+export DOTFILES_PATH=${HOME}/.dotfiles
 
 # ZSH Ops
 setopt HIST_IGNORE_ALL_DUPS

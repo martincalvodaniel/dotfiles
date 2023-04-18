@@ -99,22 +99,6 @@ bindkey "^[[1;5D" backward-word
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
-_control_h_binding() {
-    directory_to_move=$(ll | fzf | awk '{print $10}')
-    cd "$directory_to_move"
-    zle reset-prompt
-}
-zle -N _control_h_binding
-bindkey '^h'  _control_h_binding
-
-
-_reverse_search() {
-  local selected_command=$(fc -rl 1 | awk '{$1="";print substr($0,2)}' | fzf)
-  LBUFFER=$selected_command
-}
-zle -N _reverse_search
-# bindkey '^r' _reverse_search
-
 _kill_process() {
   pid=$(ps -aux | fzf | awk '{print $2}')
   kill -9 "$pid"
@@ -123,11 +107,5 @@ _kill_process() {
 zle -N _kill_process
 bindkey "^k" _kill_process
 
-_select() {
-    local command_output=$($@)
-    local selected=$(echo $command_output | fzf --no-sort | awk '{print $1}')
-    echo $selected
-    BUFFER=$selected
-}
 # Uncomment for debug with `zprof`
 # zprof
