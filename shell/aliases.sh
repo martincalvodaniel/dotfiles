@@ -61,6 +61,10 @@ alias ked="ke deploy"
 alias kecj="ke cj"
 alias kes="ke svc"
 alias kei="ke ingress"
+## edit
+alias kp="k patch"
+alias kpd="kp deploy"
+alias kpcj="kp cj"
 
 alias grep="grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}"
 
