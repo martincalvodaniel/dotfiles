@@ -36,6 +36,7 @@ alias o.='open .'
 # DOCKER
 alias drm='docker_remove'
 alias drmi='docker_remove_image'
+alias docker-rmi-dangling='docker rmi $(docker images -f "dangling=true" -q)'
 
 # K8S
 alias k="kubectl"
@@ -70,9 +71,10 @@ alias kpcj="kp cj"
 alias grep="grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}"
 
 #JAVA
-alias j8="sdk use java 8.0.362-tem"
-alias j11="sdk use java 11.0.18-tem"
-alias j17="sdk use java 17.0.6-tem"
+alias j8="sdk use java 8.0.402-tem"
+alias j11="sdk use java 11.0.22-tem"
+alias j17="sdk use java 17.0.10-tem"
+alias j21="sdk use java 21.0.2-tem"
 
 alias reload="source ~/.zshrc"
 
