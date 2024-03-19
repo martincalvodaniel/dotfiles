@@ -3,30 +3,30 @@
 <details>
   <summary>Common dependencies</summary>
 
-```shell
-sudo apt update
+  ```shell
+  sudo apt update
 
-sudo apt install -y \
-    apt-transport-https \
-    ca-certificates \
-    curl \
-    exa \
-    fzf \
-    git \
-    gnupg-agent \
-    make \
-    software-properties-common \
-    tig \
-    tree \
-    vim \
-    wget \
-    zip unzip \
-    zsh
+  sudo apt install -y \
+      apt-transport-https \
+      ca-certificates \
+      curl \
+      exa \
+      fzf \
+      git \
+      gnupg-agent \
+      make \
+      software-properties-common \
+      tig \
+      tree \
+      vim \
+      wget \
+      zip unzip \
+      zsh
 
-curl -s "https://get.sdkman.io" | bash
-source "$HOME/.sdkman/bin/sdkman-init.sh"
-sdk version
-```
+  curl -s "https://get.sdkman.io" | bash
+  source "$HOME/.sdkman/bin/sdkman-init.sh"
+  sdk version
+  ```
 
 </details>
 
@@ -37,7 +37,14 @@ sdk version
 # git
 ln -s .dotfiles/git/.gitignore_global .gitignore_global
 ln -s .dotfiles/git/.gitconfig .gitconfig
+```
 
+</details>
+
+<details>
+  <summary>Shell config</summary>
+
+```shell
 # bash
 ln -s .dotfiles/shell/bash/.bash_logout .bash_logout
 ln -s .dotfiles/shell/bash/.bash_aliases .bash_aliases
