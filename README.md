@@ -22,7 +22,12 @@ sudo apt install -y \
     wget \
     zip unzip \
     zsh
+
+curl -s "https://get.sdkman.io" | bash
+source "$HOME/.sdkman/bin/sdkman-init.sh"
+sdk version
 ```
+
 </details>
 
 <details>
@@ -51,4 +56,5 @@ ln -s .dotfiles/shell/zsh/antibody/.zshrc .zshrc
 ln -s .dotfiles/shell/zsh/antibody/.p10k.zsh .p10k.zsh
 ln -s .dotfiles/shell/zsh/antibody/.zsh_plugins.zsh .zsh_plugins.zsh
 ```
+
 </details>

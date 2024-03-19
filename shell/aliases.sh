@@ -77,7 +77,7 @@ alias j17="sdk use java 17.0.10-tem"
 alias j21="sdk use java 21.0.2-tem"
 
 alias reload="source ~/.zshrc"
-alias weather='curl -4 wttr.in/Zaragoza\?lang=es'
+alias weather="curl -4 wttr.in/Zaragoza\?lang=es"
 
 # WSL specific things
 if grep --quiet microsoft /proc/version 2>/dev/null; then
