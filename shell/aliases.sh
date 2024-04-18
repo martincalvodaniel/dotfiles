@@ -40,11 +40,15 @@ alias docker-rmi-dangling='docker rmi $(docker images -f "dangling=true" -q)'
 
 # K8S
 alias k="kubectl"
+alias kctx='f() { [ "$1" ] && kubectl config set-context --current --namespace $1; } ; f'
+
 ## logs
 alias kl="k logs"
 alias klf="kl -f"
 ## get
 alias kg="k get"
+alias kgn="kg node"
+alias kgns="kg ns"
 alias kgp="kg pod"
 alias kgd="kg deploy"
 alias kgcj="kg cj"
@@ -52,6 +56,8 @@ alias kgs="kg svc"
 alias kgi="kg ingress"
 ## describe
 alias kd="k describe"
+alias kdn="kd node"
+alias kdns="kd ns"
 alias kdp="kd pod"
 alias kdd="kd deploy"
 alias kdcj="kd cj"
@@ -63,7 +69,7 @@ alias ked="ke deploy"
 alias kecj="ke cj"
 alias kes="ke svc"
 alias kei="ke ingress"
-## edit
+## patch
 alias kp="k patch"
 alias kpd="kp deploy"
 alias kpcj="kp cj"
