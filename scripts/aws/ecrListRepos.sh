@@ -19,6 +19,20 @@ print_usage() {
     echo "  -h, --help      Display this help message"
 }
 
+format_date() {
+    local date_to_format="$1"
+    if [[ -n "$date_to_format" ]]; then
+        if [[ "$OSTYPE" == "darwin"* ]]; then
+            # macOS date command
+            date_to_format=$(date -jf "%Y-%m-%dT%H:%M:%S" "${date_to_format%.*}" "+%Y-%m-%d %H:%M:%S")
+        else
+            # GNU date command (Linux)
+            date_to_format=$(date -d "$date_to_format" '+%Y-%m-%d %H:%M:%S')
+        fi
+    fi
+    echo "$date_to_format"
+}
+
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -f | --filter) filter="$2"; shift ;;
@@ -41,9 +55,11 @@ do
     repository_name=$(echo "$repository" | jq -r '.repositoryName')
     repository_arn=$(echo "$repository" | jq -r '.repositoryArn')
     created_at=$(echo "$repository" | jq -r '.createdAt')
+    created_at=$(format_date "$created_at")
     echo "--------------------------------------------------------------------------------"
     echo "Repository: $repository_name"
     echo "Repository ARN: $repository_arn"
+
     image_details=$(aws ecr describe-images --repository-name $repository_name)
 
     image_count=$(echo "${image_details}" | jq '.imageDetails | length')
@@ -66,29 +82,12 @@ do
 
     # Get the latest push date and convert from ISO 8601 to readable format
     last_pushed_date=$(echo "${image_details}" | jq -r '.imageDetails[].imagePushedAt | select(. != null)' | sort -r | head -n1)
-    if [ -n "$last_pushed_date" ]; then
-        # Use date with proper parsing of ISO 8601 format
-        if [[ "$OSTYPE" == "darwin"* ]]; then
-            # macOS date command
-            last_pushed_date=$(date -jf "%Y-%m-%dT%H:%M:%S" "${last_pushed_date%.*}" "+%Y-%m-%d %H:%M:%S")
-        else
-            # GNU date command (Linux)
-            last_pushed_date=$(date -d "${last_pushed_date}" '+%Y-%m-%d %H:%M:%S')
-        fi
-    fi
+    last_pushed_date=$(format_date "$last_pushed_date")
     echo "Last pushed date: ${last_pushed_date}"
 
     # Get the latest pull date and convert from ISO 8601 to readable format
     last_pulled_date=$(echo "${image_details}" | jq -r '.imageDetails[].lastRecordedPullTime | select(. != null)' | sort -r | head -n1)
-    if [ -n "$last_pulled_date" ]; then
-        if [[ "$OSTYPE" == "darwin"* ]]; then
-            # macOS date command
-            last_pulled_date=$(date -jf "%Y-%m-%dT%H:%M:%S" "${last_pulled_date%.*}" "+%Y-%m-%d %H:%M:%S")
-        else
-            # GNU date command (Linux)
-            last_pulled_date=$(date -d "${last_pulled_date}" '+%Y-%m-%d %H:%M:%S')
-        fi
-    fi
+    last_pulled_date=$(format_date "$last_pulled_date")
     echo "Last pulled date: ${last_pulled_date}"
 
     # Get tags for the repository
