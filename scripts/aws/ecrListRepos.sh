@@ -3,7 +3,7 @@
 initialize_csv() {
     local current_timestamp=$(date +"%y%m%d%H%M")
     local output_file="ecr_repo_sizes-${current_timestamp}.csv"
-    echo "repository,image_count,total_size_bytes,total_size_gb,last_pushed_date,last_pulled_date" > "$output_file"
+    echo "repository,image_count,total_size_bytes,total_size_gb,last_pushed_date,last_pulled_date,terraform_tag" > "$output_file"
     echo "$output_file"
 }
 
@@ -24,17 +24,21 @@ done
 
 output_file=$(initialize_csv)
 
-repositories=$(aws ecr describe-repositories | jq -r '.repositories[].repositoryName' | sort)
+repositories=$(aws ecr describe-repositories | jq -c '.repositories[] | {repositoryName, repositoryArn}')
 
 if [[ -n "$filter" ]]; then
-    repositories=$(echo "$repositories" | grep "$filter")
+    repositories=$(echo "$repositories" | jq -c "select(.repositoryName | contains(\"$filter\"))")
 fi
 
-for repository in $(echo $repositories)
+for repository in $(echo "$repositories" | jq -c '.')
 do
+    echo "repository: $repository"
+    repository_name=$(echo "$repository" | jq -r '.repositoryName')
+    repository_arn=$(echo "$repository" | jq -r '.repositoryArn')
     echo "--------------------------------------------------------------------------------"
-    echo "Repository: $repository"
-    image_details=$(aws ecr describe-images --repository-name $repository)
+    echo "Repository: $repository_name"
+    echo "Repository ARN: $repository_arn"
+    image_details=$(aws ecr describe-images --repository-name $repository_name)
 
     image_count=$(echo "${image_details}" | jq '.imageDetails | length')
     echo "Total number of images: $image_count"
@@ -51,7 +55,7 @@ do
         fi
     fi
     echo "Total size in bytes: ${total_size_bytes}"
-    echo "Total size of all images in $repository: ${total_size_gb} GB"
+    echo "Total size of all images in $repository_name: ${total_size_gb} GB"
 
     # Get the latest push date and convert from ISO 8601 to readable format
     last_pushed_date=$(echo "${image_details}" | jq -r '.imageDetails[].imagePushedAt | select(. != null)' | sort -r | head -n1)
@@ -80,7 +84,15 @@ do
     fi
     echo "Last pulled date: ${last_pulled_date}"
 
-    echo "$repository,$image_count,$total_size_bytes,$total_size_gb,$last_pushed_date,$last_pulled_date" >> "$output_file"
+    # Get tags for the repository
+    tags=$(aws ecr list-tags-for-resource --resource-arn $repository_arn)
+    terraform_tag=$(echo "$tags" | jq -r '.tags[] | select(.Key == "terraform") | .Value // "false"')
+    if [ -z "$terraform_tag" ]; then
+        terraform_tag="false"
+    fi
+    echo "Terraform tag: $terraform_tag"
+
+    echo "$repository_name,$image_count,$total_size_bytes,$total_size_gb,$last_pushed_date,$last_pulled_date,$terraform_tag" >> "$output_file"
 done
 
 echo "Output file: $output_file"
