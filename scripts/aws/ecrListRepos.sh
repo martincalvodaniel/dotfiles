@@ -2,8 +2,12 @@
 
 initialize_csv() {
     local current_timestamp=$(date +"%y%m%d%H%M")
-    local output_file="ecr_repo_sizes-${current_timestamp}.csv"
-    echo "repository,image_count,total_size_bytes,total_size_gb,last_pushed_date,last_pulled_date,terraform_tag" > "$output_file"
+    local output_file="ecr_repo_sizes-${current_timestamp}"
+    if [[ -n "$filter" ]]; then
+        output_file+="-$filter"
+    fi
+    output_file+=".csv"
+    echo "repository,image_count,total_size_bytes,total_size_gb,created_at,last_pushed_date,last_pulled_date,terraform_tag" > "$output_file"
     echo "$output_file"
 }
 
@@ -24,7 +28,7 @@ done
 
 output_file=$(initialize_csv)
 
-repositories=$(aws ecr describe-repositories | jq -c '.repositories[] | {repositoryName, repositoryArn}')
+repositories=$(aws ecr describe-repositories | jq -c '.repositories[] | {repositoryName, repositoryArn, createdAt}')
 
 if [[ -n "$filter" ]]; then
     repositories=$(echo "$repositories" | jq -c "select(.repositoryName | contains(\"$filter\"))")
@@ -32,9 +36,9 @@ fi
 
 for repository in $(echo "$repositories" | jq -c '.')
 do
-    echo "repository: $repository"
     repository_name=$(echo "$repository" | jq -r '.repositoryName')
     repository_arn=$(echo "$repository" | jq -r '.repositoryArn')
+    created_at=$(echo "$repository" | jq -r '.createdAt')
     echo "--------------------------------------------------------------------------------"
     echo "Repository: $repository_name"
     echo "Repository ARN: $repository_arn"
@@ -56,6 +60,7 @@ do
     fi
     echo "Total size in bytes: ${total_size_bytes}"
     echo "Total size of all images in $repository_name: ${total_size_gb} GB"
+    echo "Created At: $created_at"
 
     # Get the latest push date and convert from ISO 8601 to readable format
     last_pushed_date=$(echo "${image_details}" | jq -r '.imageDetails[].imagePushedAt | select(. != null)' | sort -r | head -n1)
@@ -92,9 +97,10 @@ do
     fi
     echo "Terraform tag: $terraform_tag"
 
-    echo "$repository_name,$image_count,$total_size_bytes,$total_size_gb,$last_pushed_date,$last_pulled_date,$terraform_tag" >> "$output_file"
+    echo "$repository_name,$image_count,$total_size_bytes,$total_size_gb,$created_at,$last_pushed_date,$last_pulled_date,$terraform_tag" >> "$output_file"
 done
 
+echo "--------------------------------------------------------------------------------"
 echo "Output file: $output_file"
 
 cp $output_file /mnt/c/Users/$ORG_GRADLE_PROJECT_nexusUser/Desktop
