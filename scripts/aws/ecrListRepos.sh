@@ -4,7 +4,9 @@ initialize_csv() {
     local current_timestamp=$(date +"%y%m%d%H%M")
     local output_file="ecr_repo_sizes-${current_timestamp}"
     if [[ -n "$filter" ]]; then
-        output_file+="-$filter"
+        # Replace '/' with '-' in the filter to make it a valid filename
+        sanitized_filter=$(echo "$filter" | tr '/' '-')
+        output_file+="-$sanitized_filter"
     fi
     output_file+=".csv"
     echo "repository,image_count,total_size_bytes,total_size_gb,created_at,last_pushed_date,last_pulled_date,terraform_tag" > "$output_file"
