@@ -1,5 +1,18 @@
 #!/bin/bash
 
+# This script lists all ECR repositories and their details including image count, total size, creation date, last pushed date, last pulled date, and terraform tag.
+# It generates a CSV file with the collected data.
+# Usage: ./ecrListRepos.sh [--filter FILTER]
+# Options:
+#   -f, --filter    Filter repositories containing the specified string
+#   -h, --help      Display this help message
+
+print_usage() {
+    echo "Usage: $0 [--filter FILTER]"
+    echo "  -f, --filter    Filter repositories containing the specified string"
+    echo "  -h, --help      Display this help message"
+}
+
 initialize_csv() {
     local current_timestamp=$(date +"%y%m%d%H%M")
     local output_file="ecr_repo_sizes-${current_timestamp}"
@@ -11,12 +24,6 @@ initialize_csv() {
     output_file+=".csv"
     echo "repository,image_count,total_size_bytes,total_size_gb,created_at,last_pushed_date,last_pulled_date,terraform_tag" > "$output_file"
     echo "$output_file"
-}
-
-print_usage() {
-    echo "Usage: $0 [--filter FILTER]"
-    echo "  -f, --filter    Filter repositories containing the specified string"
-    echo "  -h, --help      Display this help message"
 }
 
 format_date() {
