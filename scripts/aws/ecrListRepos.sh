@@ -14,14 +14,18 @@ print_usage() {
 }
 
 initialize_csv() {
-    local current_timestamp=$(date +"%y%m%d%H%M")
-    local output_file="ecr_repo_sizes-${current_timestamp}"
+    local timestamp=$(date '+%Y%m%d-%H%M')
+    local script_name="ecrListRepos"
+    local output_file="${script_name}-${timestamp}"
+    
     if [[ -n "$filter" ]]; then
         # Replace '/' with '-' in the filter to make it a valid filename
         sanitized_filter=$(echo "$filter" | tr '/' '-')
         output_file+="-$sanitized_filter"
     fi
     output_file+=".csv"
+
+    # Initialize CSV with headers
     echo "repository,image_count,total_size_bytes,total_size_gb,created_at,last_pushed_date,last_pulled_date,terraform_tag" > "$output_file"
     echo "$output_file"
 }

@@ -7,11 +7,11 @@ export DOTFILES_PATH="$HOME/.dotfiles"
 unsetopt BG_NICE
 
 # WSL specific things
-if grep --quiet microsoft /proc/version 2>/dev/null; then
-  # Set Windows display for WSL
-  export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}')':0.0'
-  export LIBGL_ALWAYS_INDIRECT=1
-fi
+#if grep --quiet microsoft /proc/version 2>/dev/null; then
+#  # Set Windows display for WSL
+#  export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}')':0.0'
+#  export LIBGL_ALWAYS_INDIRECT=1
+#fi
 
 # Custom dotfiles load
 [ -f ${DOTFILES_PATH}/shell/init.sh ] && source ${DOTFILES_PATH}/shell/init.sh
@@ -82,6 +82,9 @@ preexec_functions=($preexec_functions tabtitle_preexec)
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [ -f ~/.p10k.zsh ] && source ~/.p10k.zsh
 
+# VSCode shell integration
+[[ "$TERM_PROGRAM" == "vscode" ]] && . "$(code --locate-shell-integration-path zsh)"
+
 # Keybindings
 # Source: https://www.zsh.org/mla/users/2008/msg00794.html
 bindkey '\e[1~'   beginning-of-line  # Linux console
@@ -109,3 +112,7 @@ bindkey "^k" _kill_process
 
 # Uncomment for debug with `zprof`
 # zprof
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

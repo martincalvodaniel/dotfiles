@@ -4,13 +4,14 @@ alias sudo='sudo '
 # JUMPS
 alias ~="cd ~"
 alias cdw="cd ~/workspace"
+alias cdm="cdw && cd martincalvodaniel"
 alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
 alias .....="cd ../../../.."
 
 alias ll="exa -la --icons"
-
+alias rmrf="rm -rf"
 alias d2u='dos2unix'
 
 # GIT
@@ -21,8 +22,9 @@ alias gca="git add --all && git commit --amend --no-edit"
 alias gcl="git clone"
 alias gd="git diff"
 alias gf="git fetch --all -p"
-alias gps="git push"
 alias gpl="git pull --rebase --autostash"
+alias gfp="gf && gpl"
+alias gps="git push"
 alias gpsf="git push --force"
 alias gs="git status -sb"
 
@@ -30,6 +32,7 @@ alias gs="git status -sb"
 alias ij='sh /opt/idea/bin/idea.sh > /opt/idea/log/ij.log 2>&1 &'
 alias ijp='sh /opt/idea/bin/idea.sh . > /opt/idea/log/ijp.log 2>&1 &'
 alias i.='ijp'
+alias code='code-insiders'
 alias c.='code .'
 alias o.='open .'
 
@@ -40,7 +43,7 @@ alias docker-rmi-dangling='docker rmi $(docker images -f "dangling=true" -q)'
 
 # K8S
 alias k="kubectl"
-alias kctx='f() { [ "$1" ] && kubectl config set-context --current --namespace $1; } ; f'
+alias kns='f() { [ "$1" ] && kubectl config set-context --current --namespace $1; } ; f'
 
 ## logs
 alias kl="k logs"
