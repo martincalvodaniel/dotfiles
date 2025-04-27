@@ -1,5 +1,7 @@
 # How to install Docker on Ubuntu: A step-by-step guide
 
+(All credits to https://laboratoriolinux.es/index.php/-noticias-mundo-linux-/software/37315-como-instalar-docker-en-ubuntu-un-guia-paso-a-paso.html)
+
 ## Introduction
 Docker is an open-source platform that allows you to develop, deploy, and manage applications in containers. This guide will show you how to install Docker on Ubuntu.
 
