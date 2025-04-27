@@ -10,7 +10,7 @@
       apt-transport-https \
       ca-certificates \
       curl \
-      exa \
+      eza \
       fzf \
       git \
       gnupg-agent \
@@ -27,6 +27,16 @@
   source "$HOME/.sdkman/bin/sdkman-init.sh"
   sdk version
   ```
+
+</details>
+
+<details>
+  <summary>Ssh config</summary>
+
+```shell
+# ssh
+ssh-keygen -t rsa -C "martincalvodaniel@gmail.com"
+```
 
 </details>
 
