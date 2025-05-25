@@ -41,3 +41,5 @@
     mergec = merge --no-ff --no-commit
     gclean = clean -d -f -f
 
+[init]
+	defaultBranch = main
