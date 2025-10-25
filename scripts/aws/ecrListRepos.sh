@@ -154,11 +154,11 @@ done
 echo "--------------------------------------------------------------------------------"
 echo "Output file: $output_file"
 
-# Optionally copy to Windows Desktop if running in WSL and env var is set
-if grep -qi microsoft /proc/version 2>/dev/null && [[ -n "${WINDOWS_USER:-}" ]]; then
-    win_dest="/mnt/c/Users/$WINDOWS_USER/Desktop"
+# Optionally move to Windows Desktop if running in WSL and env var is set
+if grep -qi microsoft /proc/version 2>/dev/null && [[ -n "${WINDOWS_HOME:-}" ]]; then
+    win_dest="$WINDOWS_HOME/Desktop"
     if [[ -d "$win_dest" ]]; then
-        cp "$output_file" "$win_dest" && echo "Copied to $win_dest" || echo "Failed to copy to $win_dest" >&2
+        mv "$output_file" "$win_dest" && echo "Moved to $win_dest" || echo "Failed to move to $win_dest" >&2
     else
         echo "Windows Desktop path not found: $win_dest" >&2
     fi
