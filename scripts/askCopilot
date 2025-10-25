@@ -1,0 +1,134 @@
+#!/usr/bin/env bash
+
+# Purpose: Ask GitHub Copilot CLI with a provided prompt payload.
+# Usage:
+#   askCopilot "Your question or instruction here"
+#   askCopilot -f prompt.txt
+# Options:
+#   -f, --file <path>   Read payload from file instead of first argument
+#   -h, --help          Show this help and exit
+#   --dry-run           Print the command that would run and exit
+# Notes:
+#   This script simply wraps:
+#       copilot --allow-all-tools --resume -p "$payload"
+#   It adds small conveniences: reading from a file, dry-run, basic validation, and
+#   prepends a premise that instructs Copilot to ONLY translate + optimize the question
+#   (without inspecting the current directory) before answering.
+
+set -euo pipefail
+IFS=$'\n\t'
+
+script_name="$(basename "$0")"
+
+usage() {
+	cat <<USAGE
+${script_name} - Wrapper for GitHub Copilot CLI prompt
+
+Usage:
+	${script_name} "Prompt text ..."
+	${script_name} -f prompt.txt
+
+Options:
+	-f, --file <path>   Read prompt payload from file
+	--dry-run           Show the copilot command without executing it
+	-h, --help          Show this help message
+
+Examples:
+	${script_name} "Summarize the design decisions in README.md"
+	${script_name} -f ./prompt.md
+USAGE
+}
+
+payload=""
+dry_run=false
+file_mode=false
+
+while [[ $# -gt 0 ]]; do
+	case "$1" in
+		-h|--help)
+			usage
+			exit 0
+			;;
+		--dry-run)
+			dry_run=true
+			shift
+			;;
+		-f|--file)
+			file_mode=true
+			shift
+			if [[ $# -eq 0 ]]; then
+				echo "Error: --file requires a path argument" >&2
+				exit 2
+			fi
+			file_path="$1"
+			if [[ ! -f "$file_path" ]]; then
+				echo "Error: file not found: $file_path" >&2
+				exit 2
+			fi
+			payload="$(<"$file_path")"
+			shift
+			;;
+		--) # end of options
+			shift
+			break
+			;;
+		-*)
+			echo "Error: unknown option: $1" >&2
+			echo >&2
+			usage >&2
+			exit 2
+			;;
+		*)
+			# Positional argument (prompt text) — only accept if not already set via file
+			if $file_mode; then
+				echo "Warning: ignoring extra positional argument because --file was used: $1" >&2
+				shift
+				continue
+			fi
+			if [[ -z "$payload" ]]; then
+				payload="$1"
+			else
+				# Concatenate additional positional arguments into the payload
+				payload+=" $1"
+			fi
+			shift
+			;;
+	esac
+done
+
+if [[ -z "${payload}" ]]; then
+	echo "Error: no payload provided." >&2
+	echo >&2
+	usage >&2
+	exit 1
+fi
+
+# Trim leading/trailing whitespace (bash parameter expansion)
+payload="${payload##$'\n'}"; payload="${payload%%$'\n'}"
+
+premise01="Do not look up or read anything in the current directory."
+premise02="Only translate the following question into English, optimize it, use it as a prompt."
+premise03="The output must be only the translated and optimized prompt, then the answer."
+
+full_payload="
+${premise01}
+${premise02}
+${premise03}
+
+Original question:
+${payload}
+"
+
+cmd=(copilot --allow-all-tools --resume -p "${full_payload}")
+
+if $dry_run; then
+	printf 'Dry-run: '
+	printf '%q ' "${cmd[@]}"
+	printf '\n'
+	exit 0
+fi
+
+"${cmd[@]}"
+exit_code=$?
+exit $exit_code
+
