@@ -29,8 +29,8 @@ alias gpsf="git push --force"
 alias gs="git status -sb"
 
 # IDEA
-alias ij='sh /opt/idea/bin/idea.sh > /opt/idea/log/ij.log 2>&1 &'
-alias ijp='sh /opt/idea/bin/idea.sh . > /opt/idea/log/ijp.log 2>&1 &'
+alias ij='sh /opt/idea/bin/idea.sh nosplash > /opt/idea/log/ij.log 2>&1 &'
+alias ijp='sh /opt/idea/bin/idea.sh nosplash . > /opt/idea/log/ijp.log 2>&1 &'
 alias i.='ijp'
 alias code='code-insiders'
 alias c.='code .'
@@ -40,6 +40,7 @@ alias o.='open .'
 alias drm='docker_remove'
 alias drmi='docker_remove_image'
 alias docker-rmi-dangling='docker rmi $(docker images -f "dangling=true" -q)'
+alias docker-compose='docker compose'
 
 # K8S
 alias k="kubectl"
@@ -80,10 +81,10 @@ alias kpcj="kp cj"
 alias grep="grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}"
 
 #JAVA
-alias j8="sdk use java 8.0.402-tem"
-alias j11="sdk use java 11.0.22-tem"
-alias j17="sdk use java 17.0.10-tem"
-alias j21="sdk use java 21.0.2-tem"
+alias j8="sdk use java 8.0.462-tem"
+alias j11="sdk use java 11.0.28-tem"
+alias j17="sdk use java 17.0.17-tem"
+alias j21="sdk use java 21.0.8-tem"
 
 alias reload="source ~/.zshrc"
 alias weather="curl -4 wttr.in/Zaragoza\?lang=es"
