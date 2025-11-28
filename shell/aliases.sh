@@ -84,7 +84,7 @@ alias grep="grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}"
 alias j8="sdk use java 8.0.462-tem"
 alias j11="sdk use java 11.0.28-tem"
 alias j17="sdk use java 17.0.17-tem"
-alias j21="sdk use java 21.0.8-tem"
+alias j21="sdk use java 21.0.9-tem"
 
 alias reload="source ~/.zshrc"
 alias weather="curl -4 wttr.in/Zaragoza\?lang=es"
