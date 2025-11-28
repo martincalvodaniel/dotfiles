@@ -99,9 +99,6 @@ bindkey '\eOF'    end-of-line        # gnome-terminal
 bindkey "^[[1;5C" forward-word
 bindkey "^[[1;5D" backward-word
 
-export SDKMAN_DIR="$HOME/.sdkman"
-[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
-
 _kill_process() {
   pid=$(ps -aux | fzf | awk '{print $2}')
   kill -9 "$pid"
@@ -116,3 +113,7 @@ bindkey "^k" _kill_process
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
