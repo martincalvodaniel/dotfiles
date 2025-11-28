@@ -5,6 +5,9 @@ source "$DOTFILES_PATH/shell/functions.sh"
 export PATH="$PATH:$DOTFILES_PATH/bin"
 
 # Mango
+if [ -d "$DOTFILES_PATH/scripts/.no-commit/mango" ]; then
+    export PATH="$PATH:$DOTFILES_PATH/scripts/.no-commit/mango"
+fi
 if [ -f "$DOTFILES_PATH/shell/.no-commit.mango-aliases.sh" ]; then
     source "$DOTFILES_PATH/shell/.no-commit.mango-aliases.sh"
 fi
