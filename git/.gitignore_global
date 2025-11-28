@@ -6,7 +6,8 @@
 *.sc
 
 # Custom
+**/.no-commit/
+**/*.no-commit/
 *.no-commit/*
-.no-commit/*
 *.no-commit.*
 bin
