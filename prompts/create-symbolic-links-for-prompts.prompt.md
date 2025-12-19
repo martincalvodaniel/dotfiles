@@ -51,8 +51,8 @@ echo "=== End of Dry Run ==="
 
 ## Real Execution Command:
 ```bash
-TARGET_DIR="$HOME/Library/Application Support/Code - Insiders/User/prompts"
 SOURCE_DIR="$HOME/.dotfiles/prompts"
+TARGET_DIR="$HOME/Library/Application Support/Code - Insiders/User/prompts"
 
 # Create target directory if it doesn't exist
 mkdir -p "$TARGET_DIR"
@@ -74,7 +74,52 @@ done
 # Verify
 echo "---"
 echo "Symbolic links in target directory:"
-ls -la "$TARGET_DIR"
+ls -alsh $SOURCE_DIR
+ls -alsh $TARGET_DIR
+
+# Check for files in TARGET not present in SOURCE
+echo "---"
+echo "⚠️  Checking for orphaned files in target directory..."
+orphaned_count=0
+for target_file in "$TARGET_DIR"/*.prompt.md; do
+  if [ -e "$target_file" ]; then
+    filename=$(basename "$target_file")
+    source_file="$SOURCE_DIR/$filename"
+    
+    if [ ! -f "$source_file" ]; then
+      echo "  ⚠️  WARNING: $filename exists in target but NOT in source"
+      orphaned_count=$((orphaned_count + 1))
+    fi
+  fi
+done
+
+if [ $orphaned_count -eq 0 ]; then
+  echo "  ✓ All target files have corresponding source files"
+else
+  echo "  ⚠️  Found $orphaned_count orphaned file(s) in target directory"
+fi
+
+# Check for files in SOURCE not present in TARGET
+echo "---"
+echo "⚠️  Checking for missing links in target directory..."
+missing_count=0
+for source_file in "$SOURCE_DIR"/*.prompt.md; do
+  if [ -f "$source_file" ]; then
+    filename=$(basename "$source_file")
+    target_file="$TARGET_DIR/$filename"
+    
+    if [ ! -L "$target_file" ]; then
+      echo "  ⚠️  WARNING: $filename exists in source but NOT linked in target"
+      missing_count=$((missing_count + 1))
+    fi
+  fi
+done
+
+if [ $missing_count -eq 0 ]; then
+  echo "  ✓ All source files have corresponding links in target"
+else
+  echo "  ⚠️  Found $missing_count missing link(s) in target directory"
+fi
 ```
 
 ## Result:
