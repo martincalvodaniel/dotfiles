@@ -10,7 +10,9 @@ This command creates symbolic links for all `.prompt.md` files in the dotfiles p
 
 ## Target Directories:
 - **Source**: `~/.dotfiles/prompts/`
-- **Target**: `~/Library/Application Support/Code - Insiders/User/prompts`
+- **Targets**:
+  - `~/Library/Application Support/Code - Insiders/User/prompts`
+  - `~/.config/github-copilot/intellij`
 
 ## Steps:
 1. Run a dry-run to show what will be created
@@ -24,51 +26,67 @@ This command creates symbolic links for all `.prompt.md` files in the dotfiles p
 
 ## Dry-Run Command (Preview):
 ```bash
-TARGET_DIR="$HOME/Library/Application Support/Code - Insiders/User/prompts"
 SOURCE_DIR="$HOME/.dotfiles/prompts"
+TARGET_DIRS=(
+  "$HOME/Library/Application Support/Code - Insiders/User/prompts"
+  "$HOME/.config/github-copilot/intellij"
+)
 
 echo "=== DRY RUN: Symbolic Links to be created ==="
 echo ""
 echo "Source: $SOURCE_DIR"
-echo "Target: $TARGET_DIR"
 echo ""
-echo "Prompt files to link:"
-for file in "$SOURCE_DIR"/*.prompt.md; do
-  if [ -f "$file" ]; then
-    filename=$(basename "$file")
-    target_link="$TARGET_DIR/$filename"
-    
-    if [ -L "$target_link" ]; then
-      echo "  ✓ $filename (already linked)"
-    else
-      echo "  → $filename (will be created)"
+
+for TARGET_DIR in "${TARGET_DIRS[@]}"; do
+  echo "Target: $TARGET_DIR"
+  echo "Prompt files to link:"
+  for file in "$SOURCE_DIR"/*.prompt.md; do
+    if [ -f "$file" ]; then
+      filename=$(basename "$file")
+      target_link="$TARGET_DIR/$filename"
+      
+      if [ -L "$target_link" ]; then
+        echo "  ✓ $filename (already linked)"
+      else
+        echo "  → $filename (will be created)"
+      fi
     fi
-  fi
+  done
+  echo ""
 done
-echo ""
+
 echo "=== End of Dry Run ==="
 ```
 
 ## Real Execution Command:
 ```bash
 SOURCE_DIR="$HOME/.dotfiles/prompts"
-TARGET_DIR="$HOME/Library/Application Support/Code - Insiders/User/prompts"
+TARGET_DIRS=(
+  "$HOME/Library/Application Support/Code - Insiders/User/prompts"
+  "$HOME/.config/github-copilot/intellij"
+)
 
-# Create target directory if it doesn't exist
-mkdir -p "$TARGET_DIR"
-
-# Create symbolic links for all .prompt.md files
-for file in "$SOURCE_DIR"/*.prompt.md; do
-  filename=$(basename "$file")
-  target_link="$TARGET_DIR/$filename"
+# Create target directories if they don't exist and create symbolic links
+for TARGET_DIR in "${TARGET_DIRS[@]}"; do
+  echo "Processing target: $TARGET_DIR"
   
-  # Only create if link doesn't already exist
-  if [ ! -L "$target_link" ]; then
-    ln -s "$file" "$target_link"
-    echo "Created link: $filename"
-  else
-    echo "Link already exists: $filename"
-  fi
+  # Create target directory if it doesn't exist
+  mkdir -p "$TARGET_DIR"
+  
+  # Create symbolic links for all .prompt.md files
+  for file in "$SOURCE_DIR"/*.prompt.md; do
+    filename=$(basename "$file")
+    target_link="$TARGET_DIR/$filename"
+    
+    # Only create if link doesn't already exist
+    if [ ! -L "$target_link" ]; then
+      ln -s "$file" "$target_link"
+      echo "  Created link: $filename"
+    else
+      echo "  Link already exists: $filename"
+    fi
+  done
+  echo ""
 done
 
 # Verify
@@ -76,50 +94,62 @@ echo "---"
 echo "Symbolic links in source directory:"
 ls -lh "$SOURCE_DIR"
 echo ""
-echo "Symbolic links in target directory:"
-ls -lh "$TARGET_DIR"
 
-# Check for files in TARGET not present in SOURCE
-echo "---"
-echo "[CHECK] Verifying for orphaned files in target directory..."
-orphaned_count=0
-for target_file in "$TARGET_DIR"/*.prompt.md; do
-  [ -e "$target_file" ] || continue
-  filename=$(basename "$target_file")
-  source_file="$SOURCE_DIR/$filename"
+for TARGET_DIR in "${TARGET_DIRS[@]}"; do
+  echo "Symbolic links in target directory: $TARGET_DIR"
+  if [ -d "$TARGET_DIR" ]; then
+    ls -lh "$TARGET_DIR"
+  else
+    echo "  [INFO] Directory does not exist yet"
+  fi
+  echo ""
+done
+
+# Check for files in each TARGET not present in SOURCE
+for TARGET_DIR in "${TARGET_DIRS[@]}"; do
+  echo "---"
+  echo "[CHECK] Verifying for orphaned files in: $TARGET_DIR"
+  orphaned_count=0
+  for target_file in "$TARGET_DIR"/*.prompt.md 2>/dev/null; do
+    [ -e "$target_file" ] || continue
+    filename=$(basename "$target_file")
+    source_file="$SOURCE_DIR/$filename"
+    
+    if [ ! -f "$source_file" ]; then
+      echo "  [WARN] $filename exists in target but NOT in source"
+      orphaned_count=$((orphaned_count + 1))
+    fi
+  done
   
-  if [ ! -f "$source_file" ]; then
-    echo "  [WARN] $filename exists in target but NOT in source"
-    orphaned_count=$((orphaned_count + 1))
+  if [ "$orphaned_count" -eq 0 ]; then
+    echo "  [OK] All target files have corresponding source files"
+  else
+    echo "  [WARN] Found $orphaned_count orphaned file(s) in target directory"
   fi
 done
 
-if [ "$orphaned_count" -eq 0 ]; then
-  echo "  [OK] All target files have corresponding source files"
-else
-  echo "  [WARN] Found $orphaned_count orphaned file(s) in target directory"
-fi
-
-# Check for files in SOURCE not present in TARGET
-echo "---"
-echo "[CHECK] Verifying for missing links in target directory..."
-missing_count=0
-for source_file in "$SOURCE_DIR"/*.prompt.md; do
-  [ -f "$source_file" ] || continue
-  filename=$(basename "$source_file")
-  target_file="$TARGET_DIR/$filename"
+# Check for files in SOURCE not present in each TARGET
+for TARGET_DIR in "${TARGET_DIRS[@]}"; do
+  echo "---"
+  echo "[CHECK] Verifying for missing links in: $TARGET_DIR"
+  missing_count=0
+  for source_file in "$SOURCE_DIR"/*.prompt.md; do
+    [ -f "$source_file" ] || continue
+    filename=$(basename "$source_file")
+    target_file="$TARGET_DIR/$filename"
+    
+    if [ ! -L "$target_file" ]; then
+      echo "  [WARN] $filename exists in source but NOT linked in target"
+      missing_count=$((missing_count + 1))
+    fi
+  done
   
-  if [ ! -L "$target_file" ]; then
-    echo "  [WARN] $filename exists in source but NOT linked in target"
-    missing_count=$((missing_count + 1))
+  if [ "$missing_count" -eq 0 ]; then
+    echo "  [OK] All source files have corresponding links in target"
+  else
+    echo "  [WARN] Found $missing_count missing link(s) in target directory"
   fi
 done
-
-if [ "$missing_count" -eq 0 ]; then
-  echo "  [OK] All source files have corresponding links in target"
-else
-  echo "  [WARN] Found $missing_count missing link(s) in target directory"
-fi
 
 echo "---"
 echo "[DONE] Symbolic link creation and verification complete!"
