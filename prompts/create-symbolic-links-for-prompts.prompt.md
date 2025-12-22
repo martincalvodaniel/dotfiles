@@ -26,7 +26,7 @@ This command creates symbolic links for all `.prompt.md` files in the dotfiles p
 
 ## Dry-Run Command (Preview):
 ```bash
-SOURCE_DIR="$HOME/.dotfiles/prompts"
+SOURCE_DIR="${SOURCE_DIR:-$HOME/.dotfiles/prompts}"
 TARGET_DIRS=(
   "$HOME/Library/Application Support/Code - Insiders/User/prompts"
   "$HOME/.config/github-copilot/intellij"
@@ -60,7 +60,7 @@ echo "=== End of Dry Run ==="
 
 ## Real Execution Command:
 ```bash
-SOURCE_DIR="$HOME/.dotfiles/prompts"
+SOURCE_DIR="${SOURCE_DIR:-$HOME/.dotfiles/prompts}"
 TARGET_DIRS=(
   "$HOME/Library/Application Support/Code - Insiders/User/prompts"
   "$HOME/.config/github-copilot/intellij"
