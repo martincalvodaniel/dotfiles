@@ -22,8 +22,8 @@ alias ll="ls -alsh"
 alias ij='sh idea nosplash >> /tmp/ij.log 2>&1 &'
 alias ijp='sh idea nosplash . >> /tmp/ijp.log 2>&1 &'
 
-#export DOCKER_HOST="unix://${HOME}/.colima/default/docker.sock"
-#export TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE="/var/run/docker.sock"
+export DOCKER_HOST="unix://${HOME}/.colima/default/docker.sock"
+export TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE="${DOCKER_HOST}"
 #export DOCKER_DEFAULT_PLATFORM=linux/amd64
 
 #bindkey "[b" backward-word
