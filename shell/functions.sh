@@ -58,3 +58,17 @@ function topDiskUsage() {
 
   /usr/bin/du -h --max-depth="${max_depth}" "${path}" | /usr/bin/sort -rh | /usr/bin/head -n "${limit}"
 }
+
+function killCustom() {
+  if [[ "$1" == "-h" || "$1" == "--help" || -z "$1" ]]; then
+    echo "Usage: killCustom <pid1> <pid2> ..."
+    echo "  Sends CONT, TERM, HUP, and KILL signals to the specified PIDs with a 1-second pause between each."
+    return 0
+  fi
+  kill -CONT "$@"
+  kill -TERM "$@"
+  kill -HUP "$@"
+  echo "Waiting 1 second before sending KILL signal to $@..."
+  sleep 1
+  kill -KILL "$@"
+}
