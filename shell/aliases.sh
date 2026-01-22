@@ -41,7 +41,7 @@ alias drm='docker_remove'
 alias drmi='docker_remove_image'
 alias docker-rmi-dangling='docker rmi $(docker images -f "dangling=true" -q)'
 alias docker-compose='docker compose'
-alias docker-start-mac='colima start --arch x86_64'
+alias docker-start-mac='colima start --arch x86_64 --network-address --memory 4'
 alias docker-stop-mac='colima stop'
 
 # K8S
