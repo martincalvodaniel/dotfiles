@@ -111,9 +111,10 @@ premise02="Only translate the following question into English, optimize it, use 
 premise03="The output must be only the translated and optimized prompt, then the answer."
 
 full_payload="
-${premise01}
-${premise02}
-${premise03}
+Constraints:
+- ${premise01}
+- ${premise02}
+- ${premise03}
 
 Original question:
 ${payload}
