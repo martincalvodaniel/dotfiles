@@ -1,0 +1,285 @@
+#!/usr/bin/env bash
+
+################################################################################
+# Create Symbolic Links for Prompts
+#
+# This script creates symbolic links for all .prompt.md files in the dotfiles
+# prompts folder to VS Code Insiders and GitHub Copilot IntelliJ directories.
+#
+# Source: ~/.dotfiles/prompts/
+# Targets:
+#   - ~/Library/Application Support/Code - Insiders/User/prompts
+#   - ~/.config/github-copilot/intellij
+#
+# Usage:
+#   ./create-symbolic-links-for-prompts [--dry-run]
+#   ./create-symbolic-links-for-prompts --help
+################################################################################
+
+set -euo pipefail
+
+# ============================================================================
+# Configuration
+# ============================================================================
+
+SOURCE_DIR="${SOURCE_DIR:-$HOME/.dotfiles/prompts}"
+TARGET_DIRS=(
+  "$HOME/Library/Application Support/Code - Insiders/User/prompts"
+  "$HOME/.config/github-copilot/intellij"
+)
+
+# ============================================================================
+# Helper Functions
+# ============================================================================
+
+show_help() {
+  cat << EOF
+Usage: $(basename "$0") [OPTIONS]
+
+Options:
+  --dry-run     Show what would be created without making changes
+  --help        Display this help message
+
+Examples:
+  # Preview changes without executing
+  $(basename "$0") --dry-run
+
+  # Create symbolic links
+  $(basename "$0")
+
+EOF
+}
+
+log_header() {
+  echo ""
+  echo "=== $1 ==="
+  echo ""
+}
+
+log_info() {
+  echo "ℹ️  $1"
+}
+
+log_success() {
+  echo "✓ $1"
+}
+
+log_warn() {
+  echo "⚠️  $1"
+}
+
+log_error() {
+  echo "❌ $1" >&2
+}
+
+# ============================================================================
+# Validation Functions
+# ============================================================================
+
+validate_source_dir() {
+  if [ ! -d "$SOURCE_DIR" ]; then
+    log_error "Source directory does not exist: $SOURCE_DIR"
+    exit 1
+  fi
+
+  if ! ls "$SOURCE_DIR"/*.prompt.md > /dev/null 2>&1; then
+    log_error "No .prompt.md files found in $SOURCE_DIR"
+    exit 1
+  fi
+
+  log_success "Source directory is valid: $SOURCE_DIR"
+}
+
+# ============================================================================
+# Dry Run Functions
+# ============================================================================
+
+run_dry_run() {
+  log_header "DRY RUN: Symbolic Links to be created"
+
+  echo "Source: $SOURCE_DIR"
+  echo ""
+
+  for TARGET_DIR in "${TARGET_DIRS[@]}"; do
+    echo "Target: $TARGET_DIR"
+    echo "Prompt files to link:"
+
+    for file in "$SOURCE_DIR"/*.prompt.md; do
+      if [ -f "$file" ]; then
+        filename=$(basename "$file")
+        target_link="$TARGET_DIR/$filename"
+
+        if [ -L "$target_link" ]; then
+          echo "  ✓ $filename (already linked)"
+        else
+          echo "  → $filename (will be created)"
+        fi
+      fi
+    done
+    echo ""
+  done
+
+  log_header "End of Dry Run"
+}
+
+# ============================================================================
+# Main Execution Functions
+# ============================================================================
+
+create_symbolic_links() {
+  log_header "Creating Symbolic Links"
+
+  for TARGET_DIR in "${TARGET_DIRS[@]}"; do
+    echo "Processing target: $TARGET_DIR"
+
+    # Create target directory if it doesn't exist
+    if [ ! -d "$TARGET_DIR" ]; then
+      mkdir -p "$TARGET_DIR"
+      log_success "Created directory: $TARGET_DIR"
+    fi
+
+    # Create symbolic links for all .prompt.md files
+    for file in "$SOURCE_DIR"/*.prompt.md; do
+      [ -f "$file" ] || continue
+      filename=$(basename "$file")
+      target_link="$TARGET_DIR/$filename"
+
+      # Only create if link doesn't already exist
+      if [ ! -L "$target_link" ]; then
+        ln -s "$file" "$target_link"
+        log_success "Created link: $filename"
+      else
+        log_info "Link already exists: $filename"
+      fi
+    done
+    echo ""
+  done
+}
+
+list_symbolic_links() {
+  log_header "Verification: Listing Symbolic Links"
+
+  echo "Source directory:"
+  echo "$(ls -lh "$SOURCE_DIR" | grep "\.prompt\.md")"
+  echo ""
+
+  for TARGET_DIR in "${TARGET_DIRS[@]}"; do
+    echo "Target directory: $TARGET_DIR"
+    if [ -d "$TARGET_DIR" ]; then
+      if ls "$TARGET_DIR"/*.prompt.md > /dev/null 2>&1; then
+        ls -lh "$TARGET_DIR" | grep "\.prompt\.md"
+      else
+        log_info "No prompt files found in directory"
+      fi
+    else
+      log_info "Directory does not exist yet"
+    fi
+    echo ""
+  done
+}
+
+verify_orphaned_files() {
+  log_header "CHECK: Verifying for Orphaned Files"
+
+  for TARGET_DIR in "${TARGET_DIRS[@]}"; do
+    echo "[CHECK] Target: $TARGET_DIR"
+    orphaned_count=0
+
+    for target_file in "$TARGET_DIR"/*.prompt.md; do
+      [ -e "$target_file" ] || continue
+      filename=$(basename "$target_file")
+      source_file="$SOURCE_DIR/$filename"
+
+      if [ ! -f "$source_file" ]; then
+        log_warn "$filename exists in target but NOT in source"
+        orphaned_count=$((orphaned_count + 1))
+      fi
+    done
+
+    if [ "$orphaned_count" -eq 0 ]; then
+      log_success "All target files have corresponding source files"
+    else
+      log_warn "Found $orphaned_count orphaned file(s) in target directory"
+    fi
+    echo ""
+  done
+}
+
+verify_missing_links() {
+  log_header "CHECK: Verifying for Missing Links"
+
+  for TARGET_DIR in "${TARGET_DIRS[@]}"; do
+    echo "[CHECK] Target: $TARGET_DIR"
+    missing_count=0
+
+    for source_file in "$SOURCE_DIR"/*.prompt.md; do
+      [ -f "$source_file" ] || continue
+      filename=$(basename "$source_file")
+      target_file="$TARGET_DIR/$filename"
+
+      if [ ! -L "$target_file" ]; then
+        log_warn "$filename exists in source but NOT linked in target"
+        missing_count=$((missing_count + 1))
+      fi
+    done
+
+    if [ "$missing_count" -eq 0 ]; then
+      log_success "All source files have corresponding links in target"
+    else
+      log_warn "Found $missing_count missing link(s) in target directory"
+    fi
+    echo ""
+  done
+}
+
+# ============================================================================
+# Main Script
+# ============================================================================
+
+main() {
+  # Parse command-line arguments
+  while [[ $# -gt 0 ]]; do
+    case $1 in
+      --help)
+        show_help
+        exit 0
+        ;;
+      *)
+        log_error "Unknown option: $1"
+        show_help
+        exit 1
+        ;;
+    esac
+  done
+
+  log_header "Symbolic Links for Prompts"
+
+  # Validate source directory
+  validate_source_dir
+
+  # Show dry-run for confirmation
+  #run_dry_run
+  verify_orphaned_files
+  verify_missing_links
+
+  # Wait for user confirmation
+  echo ""
+  read -p "Do you want to proceed with creating symbolic links? (y/N) " -n 1 -r
+  echo ""
+
+  if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+    log_info "Operation cancelled by user"
+    exit 0
+  fi
+
+  # Execute symbolic link creation
+  create_symbolic_links
+
+  # Verify the results
+  list_symbolic_links
+
+  log_header "DONE: Symbolic link creation and verification complete!"
+}
+
+# Run main function
+main "$@"
