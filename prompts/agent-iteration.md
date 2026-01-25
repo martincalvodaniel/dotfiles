@@ -7,7 +7,14 @@ argument-hint: Briefly describe the requested change or feature
 
 # Agent Iteration (One-Stop)
 
-Use this prompt for any iteration (feat/change/fix). It MUST run the full flow: clarify scope, plan, implement, verify, sync documentation (README.md and AGENTS.md), and produce conventional commit messages in the final response. If documentation updates are truly unnecessary, explicitly state why and confirm the checklist.
+Use this prompt for any iteration (feat/change/fix). It MUST run the full flow: clarify scope, plan, implement, verify, sync documentation (README.md and AGENTS.md), and produce conventional commit messages in the final response. If documentation updates are truly unnecessary, explicitly state why and confirm the checklist. Do not finish without the docs step and commit messages.
+
+## Execution Rules (must follow)
+
+- Run the documentation sync step even if you think no changes are needed; if none, justify each checklist item as n/a and confirm links/roadmap consistency.
+- Do not deliver a final answer without commit message options.
+- If you lack info to update docs, ask for the missing details instead of skipping.
+- If the change is code-only but affects behavior, still review README/AGENTS for consistency and state why no edits were required.
 
 ## Workflow Overview
 
@@ -16,8 +23,8 @@ Use this prompt for any iteration (feat/change/fix). It MUST run the full flow: 
 3. **Plan Briefly**: Outline steps (implementation, tests, docs). Keep it concise; ask only if blockers.
 4. **Implement**: Make the code change with tests/examples. Prefer small, verifiable steps. Add minimal comments only when non-obvious.
 5. **Verify**: Note tests run (or if not run). Call out risks, edge cases, and TODOs if any.
-6. **Documentation Sync (MANDATORY STEP)**: Apply the rules below to keep README.md and AGENTS.md aligned with the change. If no doc updates are needed, explain why each checklist item is satisfied.
-7. **Commit Message**: Propose a primary conventional commit message plus 2 alternatives (type reflects actual code change, not docs). Always include these in the final answer.
+6. **Documentation Sync (MANDATORY STEP)**: Apply the rules below to keep README.md and AGENTS.md aligned with the change. If no doc updates are needed, explain why each checklist item is satisfied. If blocked (missing context), pause and ask for the needed info instead of skipping.
+7. **Commit Message (MANDATORY STEP)**: Propose a primary conventional commit message plus 2 alternatives (type reflects actual code change, not docs). Always include these in the final answer.
 
 ## Documentation Sync & Keep Guidelines Updated
 
@@ -221,6 +228,8 @@ After analyzing and updating documentation, generate a clear, professional git c
 - **Tests**: Tests run (or "Not run" with reason).
 - **Risks**: Known risks/edge cases or "None noted".
 - **Commit Messages**: Provide Primary, Alternative 1, Alternative 2 in conventional format reflecting actual code change.
+
+If any required section is missing, do not finalize the response—request the needed information instead.
 
 ### Examples of Good Commit Messages (Documentation Included)
 
