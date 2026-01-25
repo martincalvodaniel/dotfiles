@@ -7,7 +7,7 @@ argument-hint: Briefly describe the requested change or feature
 
 # Agent Iteration (One-Stop)
 
-Use this prompt for any iteration (feat/change/fix). It guides the full flow: clarify scope, plan, implement, verify, sync documentation (README.md and AGENTS.md), and produce conventional commit messages.
+Use this prompt for any iteration (feat/change/fix). It MUST run the full flow: clarify scope, plan, implement, verify, sync documentation (README.md and AGENTS.md), and produce conventional commit messages in the final response. If documentation updates are truly unnecessary, explicitly state why and confirm the checklist.
 
 ## Workflow Overview
 
@@ -16,8 +16,8 @@ Use this prompt for any iteration (feat/change/fix). It guides the full flow: cl
 3. **Plan Briefly**: Outline steps (implementation, tests, docs). Keep it concise; ask only if blockers.
 4. **Implement**: Make the code change with tests/examples. Prefer small, verifiable steps. Add minimal comments only when non-obvious.
 5. **Verify**: Note tests run (or if not run). Call out risks, edge cases, and TODOs if any.
-6. **Documentation Sync**: Apply the rules below to keep README.md and AGENTS.md aligned with the change.
-7. **Commit Message**: Propose a primary conventional commit message plus 2 alternatives (type reflects actual code change, not docs).
+6. **Documentation Sync (MANDATORY STEP)**: Apply the rules below to keep README.md and AGENTS.md aligned with the change. If no doc updates are needed, explain why each checklist item is satisfied.
+7. **Commit Message**: Propose a primary conventional commit message plus 2 alternatives (type reflects actual code change, not docs). Always include these in the final answer.
 
 ## Documentation Sync & Keep Guidelines Updated
 
@@ -118,6 +118,8 @@ Before considering documentation complete:
 - [ ] New patterns are documented before implementing wide adoption
 - [ ] Commit message generated following conventional format with 2-3 alternatives provided
 
+If any item is not applicable, explicitly mark it n/a with a one-line reason.
+
 ### Common Scenarios
 
 #### Adding a new validated API endpoint for a different resource
@@ -211,6 +213,14 @@ After analyzing and updating documentation, generate a clear, professional git c
 ✓ Type/scope are accurate and focused on implementation  
 ✓ No vague or generic terminology  
 ✓ Professional and ready for production git history
+
+## Final Response Format (Do not skip)
+
+- **Changes**: Brief bullet list of key code changes.
+- **Docs**: List doc updates performed with file links; if none, say "None needed" and justify against the checklist.
+- **Tests**: Tests run (or "Not run" with reason).
+- **Risks**: Known risks/edge cases or "None noted".
+- **Commit Messages**: Provide Primary, Alternative 1, Alternative 2 in conventional format reflecting actual code change.
 
 ### Examples of Good Commit Messages (Documentation Included)
 
