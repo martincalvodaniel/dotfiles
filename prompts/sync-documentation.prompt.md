@@ -134,87 +134,99 @@ Before considering documentation complete:
 
 ## Commit Message Generation (after sync)
 
-After analyzing and updating documentation, generate a clear, professional git commit message following conventional commit format to document the sync work.
+After analyzing and updating documentation, generate a clear, professional git commit message following conventional commit format. **Focus on the actual feature/code change**, not the documentation update itself. Documentation changes are supporting work included in the commit.
 
 ### Task Steps
 
 1. **Identify the Change Type**
-   - Choose `docs` (default for documentation sync)
-   - Alternative types only if significant beyond docs: `chore` (tooling changes), `refactor` (restructure), `feat` (new guidance)
-   - Review what was modified to assess the primary nature across all files
+   - Determine the primary type based on the **actual code/feature change**, not the documentation work:
+     - `feat`: new API endpoint, new component, new pattern
+     - `refactor`: restructured logic, changed patterns, API redesign
+     - `fix`: bug fix, corrected behavior
+     - `perf`: performance improvement
+     - `chore`: infrastructure, dependencies, build changes
+     - Use `docs` ONLY if documentation changes exist without any code changes
+   - Review what was implemented to assess the primary nature
 
 2. **Extract Key Information**
-   - What was the problem or goal? (Why was sync needed?)
-   - Which documentation files were affected? (README.md, AGENTS.md, both)
-   - What sections were updated or added?
-   - What is the user-facing or developer-facing impact?
-   - Are there any breaking changes to documented patterns or guidelines?
+   - What was the actual problem or goal? (Why was this work done?)
+   - What code/feature was added, changed, or fixed?
+   - Which files or components were affected by the real work?
+   - What is the user-facing or developer-facing impact of the change (not the docs)?
+   - Are there any breaking changes to the actual implementation?
+   - What documentation was synced to reflect this change?
 
 3. **Draft the Commit Message**
    - **Subject line** (max 50 characters):
      - Use the format: `type(scope): brief description`
-     - Start with lowercase verb (sync, update, refactor, add, clarify, document, etc.)
-     - Be specific: name the scope if possible (e.g., `README`, `AGENTS`, `documentation`)
-     - Be concise and clear
+     - Focus on the **code change**, not documentation
+     - Start with lowercase verb matching the actual work (add, implement, refactor, fix, etc.)
+     - Example: `feat(api): add user authentication` not `docs: document new auth`
    - **Body** (if needed):
-     - Explain the *why* and *what*, not the *how*
-     - List which docs were synchronized and what changed
-     - Reference related issues or feature implementations
-     - Explicitly list breaking changes if documented patterns changed
+     - Explain *why* this change was made (business goal, technical need)
+     - Describe *what* was implemented or changed
+     - Include which documentation was updated to reflect this change
+     - Reference related issues or tickets
+     - List breaking changes explicitly
    - **Footer** (if needed):
      - Add issue references: `Closes #123`
      - Add co-authors if applicable
 
 4. **Validate Against Standards**
    - Subject line is 50 characters or less
-   - Commit type is `docs` or justified alternative
-   - Scope clearly identifies which docs (if applicable)
-   - Message explains *why* sync was needed, not just *what* changed
+   - Commit type reflects the actual code change, not documentation
+   - Scope is clear and specific to the feature/code change
+   - Message explains *why* the feature was built, not just *what* docs were updated
+   - Body mentions synced documentation as supporting context
    - No imperative mood issues or unnecessary details
    - No generic messages like "update docs", "sync files", "WIP"
 
 5. **Provide Alternatives**
-   - Offer 2-3 variations if the sync spans multiple kinds of changes
+   - Offer 2-3 variations if the change spans multiple work areas
    - Label them as "Primary", "Alternative 1", "Alternative 2"
-   - Each should reflect slightly different emphasis or scope focus
+   - Each should reflect different emphasis on the actual work vs. documentation scope
 
 ### Success Criteria
 
-✓ Message follows conventional commit format  
-✓ Subject line is clear, specific, and ≤50 chars  
-✓ Type/scope are accurate (docs scope is clear)  
-✓ Explains *why* documentation was synced, not just *what* changed  
-✓ References specific files or sections updated  
+✓ Message describes the actual feature/code change, not the documentation update  
+✓ Subject line reflects real work type (feat, fix, refactor, etc.)  
+✓ Body mentions documentation sync as supporting context  
+✓ Explains *why* the change was made, not just *what* docs were updated  
+✓ Type/scope are accurate and focused on implementation  
 ✓ No vague or generic terminology  
 ✓ Professional and ready for production git history  
 
-### Examples of Good Commit Messages for Doc Sync
+### Examples of Good Commit Messages (Documentation Included)
 
 ```
-docs(README): clarify quick start and add deployment section
+feat(auth): implement user authentication with JWT tokens
 
-Update README.md to include step-by-step quick start instructions
-and add comprehensive deployment guidelines. Reorganize sections for
-better onboarding of new developers.
-```
+Add JWT-based authentication system for user login/logout.
+Includes secure token generation, validation, and refresh flow.
 
-```
-docs(AGENTS): document new database operation patterns
+Updated AGENTS.md with new authentication patterns and setup
+instructions. Updated README.md Quick Start with login examples.
 
-Sync AGENTS.md with newly established patterns for database
-operations, transaction handling, and error recovery. Add code
-examples for common use cases and best practices.
-
-Addresses improved developer guidance for data layer work.
+Closes #123
 ```
 
 ```
-docs: synchronize README and AGENTS after API refactor
+refactor(database): restructure transaction handling patterns
 
-Update both README.md and AGENTS.md to reflect new API endpoint
-structure and deprecated patterns. Move old patterns to archived
-section and document migration path for existing consumers.
+Replace callback-based transaction handling with async/await pattern.
+Improve error recovery and add automatic rollback on failures.
 
-Breaking change: Old API endpoint format no longer documented.
+Synced AGENTS.md with new database operation patterns and updated
+Common Tasks section with migration examples for existing code.
+```
+
+```
+fix(api): resolve race condition in concurrent requests
+
+Fix data corruption issue in concurrent request handlers by adding
+proper request queuing. New pattern prevents simultaneous writes.
+
+Updated AGENTS.md with corrected concurrency guidelines and added
+warning about deprecated parallel processing approach.
 ```
 
