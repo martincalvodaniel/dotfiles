@@ -2,7 +2,6 @@
 name: git_generate-commit-message
 description: Generate a well-structured commit message for recent code changes.
 argument-hint: Optional - description of changes made, technologies involved, or specific context. If omitted, analyze git diff or provided context.
-tools: [ 'search', 'read' ]
 ---
 
 Generate a clear, professional git commit message following conventional commit format based on the work performed.
@@ -46,11 +45,11 @@ Generate a clear, professional git commit message following conventional commit 
 
 ## Success Criteria
 
-✓ Message follows conventional commit format  
-✓ Subject line is clear, specific, and ≤50 chars  
-✓ Type/scope are accurate and consistent  
-✓ Explains *why* the change was made, not just *what*  
-✓ No vague or generic terminology  
+✓ Message follows conventional commit format
+✓ Subject line is clear, specific, and ≤50 chars
+✓ Type/scope are accurate and consistent
+✓ Explains *why* the change was made, not just *what*
+✓ No vague or generic terminology
 ✓ Professional and ready for production git history
 
 ## Examples of Good Commit Messages

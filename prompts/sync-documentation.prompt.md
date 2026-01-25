@@ -100,6 +100,7 @@ Before considering documentation complete:
 - [ ] Roadmap status (`[x]` vs `[ ]`) is consistent across files
 - [ ] No contradictions between documents
 - [ ] New patterns are documented before implementing wide adoption
+- [ ] Commit message generated following conventional format with 2-3 alternatives provided
 
 ## Common Scenarios
 
@@ -130,4 +131,90 @@ Before considering documentation complete:
 ✅ **Examples matter**: Include code examples for abstract patterns  
 ✅ **Link docs together**: Users should navigate naturally between files  
 ✅ **Different audiences**: README for users, AGENTS.md for builders
+
+## Commit Message Generation (after sync)
+
+After analyzing and updating documentation, generate a clear, professional git commit message following conventional commit format to document the sync work.
+
+### Task Steps
+
+1. **Identify the Change Type**
+   - Choose `docs` (default for documentation sync)
+   - Alternative types only if significant beyond docs: `chore` (tooling changes), `refactor` (restructure), `feat` (new guidance)
+   - Review what was modified to assess the primary nature across all files
+
+2. **Extract Key Information**
+   - What was the problem or goal? (Why was sync needed?)
+   - Which documentation files were affected? (README.md, AGENTS.md, both)
+   - What sections were updated or added?
+   - What is the user-facing or developer-facing impact?
+   - Are there any breaking changes to documented patterns or guidelines?
+
+3. **Draft the Commit Message**
+   - **Subject line** (max 50 characters):
+     - Use the format: `type(scope): brief description`
+     - Start with lowercase verb (sync, update, refactor, add, clarify, document, etc.)
+     - Be specific: name the scope if possible (e.g., `README`, `AGENTS`, `documentation`)
+     - Be concise and clear
+   - **Body** (if needed):
+     - Explain the *why* and *what*, not the *how*
+     - List which docs were synchronized and what changed
+     - Reference related issues or feature implementations
+     - Explicitly list breaking changes if documented patterns changed
+   - **Footer** (if needed):
+     - Add issue references: `Closes #123`
+     - Add co-authors if applicable
+
+4. **Validate Against Standards**
+   - Subject line is 50 characters or less
+   - Commit type is `docs` or justified alternative
+   - Scope clearly identifies which docs (if applicable)
+   - Message explains *why* sync was needed, not just *what* changed
+   - No imperative mood issues or unnecessary details
+   - No generic messages like "update docs", "sync files", "WIP"
+
+5. **Provide Alternatives**
+   - Offer 2-3 variations if the sync spans multiple kinds of changes
+   - Label them as "Primary", "Alternative 1", "Alternative 2"
+   - Each should reflect slightly different emphasis or scope focus
+
+### Success Criteria
+
+✓ Message follows conventional commit format  
+✓ Subject line is clear, specific, and ≤50 chars  
+✓ Type/scope are accurate (docs scope is clear)  
+✓ Explains *why* documentation was synced, not just *what* changed  
+✓ References specific files or sections updated  
+✓ No vague or generic terminology  
+✓ Professional and ready for production git history  
+
+### Examples of Good Commit Messages for Doc Sync
+
+```
+docs(README): clarify quick start and add deployment section
+
+Update README.md to include step-by-step quick start instructions
+and add comprehensive deployment guidelines. Reorganize sections for
+better onboarding of new developers.
+```
+
+```
+docs(AGENTS): document new database operation patterns
+
+Sync AGENTS.md with newly established patterns for database
+operations, transaction handling, and error recovery. Add code
+examples for common use cases and best practices.
+
+Addresses improved developer guidance for data layer work.
+```
+
+```
+docs: synchronize README and AGENTS after API refactor
+
+Update both README.md and AGENTS.md to reflect new API endpoint
+structure and deprecated patterns. Move old patterns to archived
+section and document migration path for existing consumers.
+
+Breaking change: Old API endpoint format no longer documented.
+```
 
