@@ -72,3 +72,17 @@ function killCustom() {
   sleep 1
   kill -KILL "$@"
 }
+
+function go-to-today() {
+  # Get today's date in YY/MM/DD format
+  local today=$(date +%y/%m/%d)
+  
+  # Set the journal directory
+  local journal_dir="$HOME/journal"
+  
+  # Create the directory if it doesn't exist
+  mkdir -p "$journal_dir/$today"
+  
+  # Navigate to today's folder
+  cd "$journal_dir/$today"
+}
