@@ -7,7 +7,7 @@ argument-hint: Briefly describe the requested change or feature
 
 # Agent Iteration (One-Stop)
 
-Use this prompt for any iteration (feat/change/fix). It MUST run the full flow: clarify scope, plan, implement, lint & fix, verify, sync documentation (README.md and AGENTS.md), and produce conventional commit messages in the final response. If documentation updates are truly unnecessary, explicitly state why and confirm the checklist. Do not finish without the docs step and commit messages.
+Use this prompt for any iteration (feat/change/fix). It MUST run the full flow: clarify scope, plan, implement, lint & build fix, verify, sync documentation (README.md and AGENTS.md), and produce conventional commit messages in the final response. If documentation updates are truly unnecessary, explicitly state why and confirm the checklist. Do not finish without the docs step and commit messages.
 
 ## Execution Rules (must follow)
 
@@ -22,7 +22,7 @@ Use this prompt for any iteration (feat/change/fix). It MUST run the full flow: 
 2. **Assess Context**: Inspect relevant files and current behavior. Note dependencies, feature flags, env vars, and tests.
 3. **Plan Briefly**: Outline steps (implementation, tests, docs). Keep it concise; ask only if blockers.
 4. **Implement**: Make the code change with tests/examples. Prefer small, verifiable steps. Add minimal comments only when non-obvious.
-5. **Lint & Fix**: Run `pnpm lint` in a loop and fix all errors and warnings until the command passes cleanly with no issues.
+5. **Lint & Build Fix**: Run `pnpm run lint 2>&1 | head -100` in a loop and fix all errors and warnings until the command passes cleanly with no issues. Run `pnpm run build 2>&1 | head -100` in a loop and fix all errors and warnings until the command passes cleanly with no issues.
 6. **Verify**: Note tests run (or if not run). Call out risks, edge cases, and TODOs if any.
 7. **Documentation Sync (MANDATORY STEP)**: Apply the rules below to keep README.md and AGENTS.md aligned with the change. If no doc updates are needed, explain why each checklist item is satisfied. If blocked (missing context), pause and ask for the needed info instead of skipping.
 8. **Commit Message (MANDATORY STEP)**: Propose a primary conventional commit message plus 2 alternatives (type reflects actual code change, not docs). Always include these in the final answer.
