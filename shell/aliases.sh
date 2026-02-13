@@ -92,6 +92,8 @@ alias j25="sdk use java 25.0.1-tem"
 alias reload="source ~/.zshrc"
 alias weather="curl -4 wttr.in/Zaragoza\?lang=es"
 
+alias python="python3"
+
 # WSL specific things
 if grep --quiet microsoft /proc/version 2>/dev/null; then
   alias idea="(pkill -f 'java.*idea' || true) && screen -d -m /opt/idea/bin/idea.sh"
